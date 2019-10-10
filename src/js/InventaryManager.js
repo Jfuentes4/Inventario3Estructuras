@@ -21,7 +21,9 @@ class InventaryManager {
     console.log(dataArticle);
     if (this._first === null) {
       this._first = {data: new Article(dataArticle), next: null};
-    } else {
+    } else if (dataArticle.position !== 0) {
+      this._insertInPos(dataArticle, dataArticle.position)
+    }else {
       this._add(dataArticle, this._first);
     }
 
@@ -34,6 +36,15 @@ class InventaryManager {
     } else {
       this._add(newElement, lastElement.next);
     }
+  }
+
+  _insertInPos = (newElement, pos) => {
+    let current = this._first;
+    for (let i = 1; i < pos - 1 && current.next !== null; i++) {
+      current = current.next;
+    }
+    let tmp = current.next;
+    current.next = {data: new Article(newElement), next: tmp};
   }
 
   deleteArticle = (code) => {
@@ -49,10 +60,18 @@ class InventaryManager {
   _myRemove = (code) => {
     let deleted = false,
     current = this._first;
-    while (current.next !== null && !deleted) {
-      if (current.next.data.code === code) {
-        current.next = current.next.next;
-        deleted = true;
+    if (current.data.code === code) {
+      if (current.next === null ) {
+        this._first = current.next;
+      } else {
+        this._first = current.next
+      }
+    } else {
+      while (current.next !== null && !deleted) {
+        if (current.next.data.code === code) {
+          current.next = current.next.next;
+          deleted = true;
+        }
       }
     }
     return deleted;
@@ -62,8 +81,7 @@ class InventaryManager {
     let result = this.findArticle(Number(str));
     console.log(result);
     if (result){
-      window.alert('Codigo: ' + result.data.code + ' Nombre: ' + result.data.name + ' Price: ' + result.data.price +
-      ' Cantidad: '+ result.data.quantity + ' Descripcion: ' + result.data.description);
+      window.alert(current.data.toString());
     } else {
       window.alert('no se encontro el producto con el indice ' + str);
     }
@@ -78,8 +96,7 @@ class InventaryManager {
     while (current !== null){
       noArticlesD++;
       sumArticles += current.data.quantity;
-      reportstr += 'Codigo: ' + current.data.code + ' Nombre: ' + current.data.name + ' Price: ' + current.data.price +
-      ' Cantidad: '+ current.data.quantity + ' Descripcion: ' + current.data.description + '<br>';
+      reportstr += current.data.toString() + '<br>';
       current = current.next;
     }
 
@@ -107,20 +124,17 @@ class InventaryManager {
   _getStrInverseElements= (current) => {
     if (current.next !== null) {
       let lastStr = this._getStrInverseElements(current.next);
-      let newStr = 'Codigo: ' + current.data.code + ' Nombre: ' + current.data.name + ' Price: ' + current.data.price +
-      ' Cantidad: '+ current.data.quantity + ' Descripcion: ' + current.data.description + '<br>';
-
+      let newStr = current.data.toString() + '<br>';
       return lastStr + newStr;
     } else {
-      return 'Codigo: ' + current.data.code + ' Nombre: ' + current.data.name + ' Price: ' + current.data.price +
-      ' Cantidad: '+ current.data.quantity + ' Descripcion: ' + current.data.description + '<br>';
+      return current.data.toString() + '<br>';
     }
   }
 
 
   _ifDontExist = (code) => {
     let dontExist = true;
-    if (this.findArticle(code)) {
+    if (this.findArticle(Number(code))) {
       dontExist = false;
     }
     return dontExist;

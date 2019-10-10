@@ -28,7 +28,8 @@ class Article {
   }
 
   toString () {
-    return this._quantity + ' ' + this._name + '(code: ' + this._code + ') ' + this._price + 'c/u';
+    return 'Codigo: ' + this.code + ' Nombre: ' + this.name + ' Price: ' + this.price +
+    ' Cantidad: '+ this.quantity + ' Descripcion: ' + this.description;
   }
 
 }

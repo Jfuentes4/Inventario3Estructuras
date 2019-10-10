@@ -45,6 +45,7 @@ class Main {
     let price = Number(document.getElementById('price').value);
     let quantity = Number(document.getElementById('quantity').value);
     let description = document.getElementById('description').value;
+    let position = Number(document.getElementById('position').value);
 
     let objArticle = {
       name,
@@ -52,6 +53,7 @@ class Main {
       price,
       quantity,
       description,
+      position,
     };
     return objArticle;
   }
